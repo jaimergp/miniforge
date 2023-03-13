@@ -1,5 +1,6 @@
 # Miniforge
-![Build Miniforge](https://github.com/conda-forge/miniforge/workflows/Build%20miniforge/badge.svg)
+[![Build miniforge](https://github.com/conda-forge/miniforge/actions/workflows/ci.yml/badge.svg)](https://github.com/conda-forge/miniforge/actions/workflows/ci.yml)
+[![GitHub downloads](https://img.shields.io/github/downloads/conda-forge/miniforge/total.svg)](https://tooomm.github.io/github-release-stats/?username=conda-forge&repository=miniforge)
 
 This repository holds a minimal installer for [Conda](https://conda.io/) specific to [conda-forge](https://conda-forge.org/).
 Miniforge allows you to install the conda package manager with the following features pre-configured:
@@ -80,7 +81,7 @@ Latest installers with Mamba and PyPy in the base environment:
 
 ## Install
 
-### Unix-like platforms
+### Unix-like platforms (Mac OS & Linux)
 
 Download the installer using curl or wget or your favorite program download files and run the script.
 For eg:
@@ -155,7 +156,7 @@ For Linux, any architecture, use the following command
 
     wget -O Miniforge3.sh "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh"
 
-When you want to use `Mambaforge`, you should replace Miniforge into Mamabaforge:
+When you want to use `Mambaforge`, you should replace Miniforge into Mambaforge:
 
     wget -O Mambaforge.sh  "https://github.com/conda-forge/miniforge/releases/latest/download/Mambaforge-$(uname)-$(uname -m).sh"
 
