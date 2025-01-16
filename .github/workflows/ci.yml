@@ -1,5 +1,13 @@
 name: Build miniforge
-on: [ push, pull_request ]
+on:
+  push:
+    branches:
+      - "master"
+      - "main"
+  pull_request:
+    branches:
+      - "master"
+      - "main"
 
 jobs:
   build:
@@ -15,51 +23,51 @@ jobs:
           #   MINIFORGE_NAME: "Miniforge3"
           #   OS_NAME: "Windows"
 
-          - os: macos-latest
-            ARCH: arm64
-            TARGET_PLATFORM: osx-arm64
-            MINIFORGE_NAME: "Miniforge3"
-            OS_NAME: "MacOSX"
+          # - os: macos-latest
+          #   ARCH: arm64
+          #   TARGET_PLATFORM: osx-arm64
+          #   MINIFORGE_NAME: "Miniforge3"
+          #   OS_NAME: "MacOSX"
 
-          - os: macos-latest
-            ARCH: x86_64
-            TARGET_PLATFORM: osx-64
-            MINIFORGE_NAME: "Miniforge3"
-            OS_NAME: "MacOSX"
+          # - os: macos-latest
+          #   ARCH: x86_64
+          #   TARGET_PLATFORM: osx-64
+          #   MINIFORGE_NAME: "Miniforge3"
+          #   OS_NAME: "MacOSX"
 
-          - os: ubuntu-latest
-            ARCH: aarch64
-            TARGET_PLATFORM: linux-aarch64
-            DOCKER_ARCH: arm64/v8
-            DOCKERIMAGE: condaforge/linux-anvil-aarch64
-            MINIFORGE_NAME: "Miniforge3"
-            OS_NAME: "Linux"
-            # Reduce the test matrix because the builds timeouts on emulated architectures
-            # The time consuming operation is an attempt a full solve of conda/mamba/boa
-            # for as a compatibility
-            # xref https://github.com/conda-forge/miniforge/pull/361
-            TEST_IMAGE_NAMES: "ubuntu:24.04"
+          # - os: ubuntu-latest
+          #   ARCH: aarch64
+          #   TARGET_PLATFORM: linux-aarch64
+          #   DOCKER_ARCH: arm64/v8
+          #   DOCKERIMAGE: condaforge/linux-anvil-aarch64
+          #   MINIFORGE_NAME: "Miniforge3"
+          #   OS_NAME: "Linux"
+          #   # Reduce the test matrix because the builds timeouts on emulated architectures
+          #   # The time consuming operation is an attempt a full solve of conda/mamba/boa
+          #   # for as a compatibility
+          #   # xref https://github.com/conda-forge/miniforge/pull/361
+          #   TEST_IMAGE_NAMES: "ubuntu:24.04"
 
           - os: ubuntu-latest
             ARCH: x86_64
             TARGET_PLATFORM: linux-64
             DOCKER_ARCH: amd64
             DOCKERIMAGE: condaforge/linux-anvil-cos7-x86_64
-            MINIFORGE_NAME: "Miniforge3"
+            MINIFORGE_NAME: "Miniforge3-colab"
             OS_NAME: "Linux"
 
-          - os: ubuntu-latest
-            ARCH: ppc64le
-            TARGET_PLATFORM: linux-ppc64le
-            DOCKER_ARCH: ppc64le
-            DOCKERIMAGE: condaforge/linux-anvil-ppc64le
-            MINIFORGE_NAME: "Miniforge3"
-            OS_NAME: "Linux"
-            # Reduce the test matrix because the builds timeouts on emulated architectures
-            # The time consuming operation is an attempt a full solve of conda/mamba/boa
-            # for as a compatibility
-            # xref https://github.com/conda-forge/miniforge/pull/361
-            TEST_IMAGE_NAMES: "ubuntu:24.04"
+          # - os: ubuntu-latest
+          #   ARCH: ppc64le
+          #   TARGET_PLATFORM: linux-ppc64le
+          #   DOCKER_ARCH: ppc64le
+          #   DOCKERIMAGE: condaforge/linux-anvil-ppc64le
+          #   MINIFORGE_NAME: "Miniforge3"
+          #   OS_NAME: "Linux"
+          #   # Reduce the test matrix because the builds timeouts on emulated architectures
+          #   # The time consuming operation is an attempt a full solve of conda/mamba/boa
+          #   # for as a compatibility
+          #   # xref https://github.com/conda-forge/miniforge/pull/361
+          #   TEST_IMAGE_NAMES: "ubuntu:24.04"
 
     steps:
       - name: Checkout code
