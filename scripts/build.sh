@@ -14,7 +14,7 @@ echo "***** Install constructor *****"
 mamba install --yes \
     --channel conda-forge --override-channels \
     jinja2 curl libarchive \
-    "constructor>=3.4.2"
+    "constructor>=3.9.3"
 
 if [[ "$(uname)" == "Darwin" ]]; then
     mamba install --yes \
@@ -38,7 +38,7 @@ cp LICENSE "${TEMP_DIR}/"
 ls -al "${TEMP_DIR}"
 
 if [[ "${TARGET_PLATFORM}" != win-* ]]; then
-    MICROMAMBA_VERSION=1.3.1
+    MICROMAMBA_VERSION=1.5.11
     MICROMAMBA_BUILD=0
     mkdir "${TEMP_DIR}/micromamba"
     pushd "${TEMP_DIR}/micromamba"
@@ -53,6 +53,15 @@ if [[ "${TARGET_PLATFORM}" != win-* ]]; then
     EXTRA_CONSTRUCTOR_ARGS="${EXTRA_CONSTRUCTOR_ARGS} --conda-exe ${MICROMAMBA_FILE} --platform ${TARGET_PLATFORM}"
 fi
 
+echo "***** Set virtual package versions *****"
+if [[ "${TARGET_PLATFORM}" == linux-* ]]; then
+    export CONDA_OVERRIDE_GLIBC=2.17
+elif [[ "${TARGET_PLATFORM}" == osx-64 ]]; then
+    export CONDA_OVERRIDE_OSX=10.13
+elif [[ "${TARGET_PLATFORM}" == osx-arm64 ]]; then
+    export CONDA_OVERRIDE_OSX=11.0
+fi
+
 echo "***** Construct the installer *****"
 # Transmutation requires the current directory is writable
 cd "${TEMP_DIR}"
@@ -62,6 +71,7 @@ cd -
 
 echo "***** Generate installer hash *****"
 cd "${TEMP_DIR}"
+ls -alh
 if [[ "$(uname)" == MINGW* ]]; then
    EXT="exe";
 else

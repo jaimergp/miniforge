@@ -25,7 +25,7 @@ echo "***** Run the installer *****"
 chmod +x "${INSTALLER_PATH}"
 if [[ "$(uname)" == MINGW* ]]; then
   echo "start /wait \"\" ${INSTALLER_PATH} /InstallationType=JustMe /RegisterPython=0 /S /D=$(cygpath -w "${CONDA_PATH}")" > install.bat
-  cmd.exe /c install.bat
+  cmd.exe //c install.bat
 
   echo "***** Setup conda *****"
   # Workaround a conda bug where it uses Unix style separators, but MinGW doesn't understand them
@@ -45,24 +45,10 @@ if [[ "$(uname)" == MINGW* ]]; then
   echo "***** Check if we can install a package which requires msys2 *****"
   conda.exe install r-base --yes --quiet
   conda.exe list
-
-  # hmaarrfk -- 2023/02
-  # For some reason the Mambaforge-Linux-ppc64le works fine in under 15 mins on a branch
-  # but then fails to build within the 6 hour time limit on the release CI.
-  if [[ "${INSTALLER_NAME}" == "Mambaforge" ]] && [[ "${INSTALLER_EXE}" != "Mambaforge-Linux-ppc64le.sh" ]]; then
-    echo "***** Mambaforge detected. Checking for boa compatibility *****"
-    mamba_version_start=$(mamba --version | grep mamba | cut -d ' ' -f 2)
-    mamba.exe install boa --yes
-    mamba_version_end=$(mamba --version | grep mamba | cut -d ' ' -f 2)
-    if [[ "${mamba_version_start}" != "${mamba_version_end}" ]]; then
-        echo "mamba version changed from ${mamba_version_start} to ${mamba_version_end}"
-        exit 1
-    fi
-  fi
 else
   # Test one of our installers in batch mode
   if [[ "${INSTALLER_NAME}" == "Mambaforge" ]]; then
-    bash "${INSTALLER_PATH}" -b -p "${CONDA_PATH}"
+    sh "${INSTALLER_PATH}" -b -p "${CONDA_PATH}"
   # And the other in interactive mode
   else
     # Test interactive install. The install will ask the user to
@@ -70,7 +56,7 @@ else
     # - yes -- then accept
     # - ${CONDA_PATH} -- Then specify the path
     # - no -- Then whether or not they want to initialize conda
-    cat <<EOF | bash "${INSTALLER_PATH}"
+    cat <<EOF | sh "${INSTALLER_PATH}"
 
 yes
 ${CONDA_PATH}
@@ -85,27 +71,7 @@ EOF
   echo "***** Print conda info *****"
   conda info
   conda list
-
-  if [[ "${INSTALLER_NAME}" == "Mambaforge" ]]; then
-    echo "***** Mambaforge detected. Checking for boa compatibility *****"
-    implementation=$(python -c "import platform; print(platform.python_implementation().lower())")
-    major_minor_version=$(python -c 'import sys; print(f"{sys.version_info[0]}.{sys.version_info[1]}")')
-    mamba_version_start=$(mamba --version | grep mamba | cut -d ' ' -f 2)
-    mamba info
-    mamba install "mamba=${mamba_version_start}" "python=${major_minor_version}.*=*_${implementation}" boa --yes
-    mamba_version_end=$(mamba --version | grep mamba | cut -d ' ' -f 2)
-    if [[ "${mamba_version_start}" != "${mamba_version_end}" ]]; then
-        echo "mamba version changed from ${mamba_version_start} to ${mamba_version_end}"
-        exit 1
-    fi
-
-  fi
 fi
-
-
-# 2020/09/15: Running conda update switches from pypy to cpython. Not sure why
-# echo "***** Run conda update *****"
-# conda update --all -y
 
 echo "***** Python path *****"
 python -c "import sys; print(sys.executable)"
